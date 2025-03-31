@@ -14,7 +14,7 @@ namespace Jang
         }
         void FixedUpdate()
         {
-            transform.position = Vector3.Lerp(transform.position, _playerT.position + _offSet, Time.fixedDeltaTime * 20f);
+            transform.position = Vector3.Lerp(transform.position, new Vector3(0, _playerT.position.y, 0) + _offSet, Time.fixedDeltaTime * 20f);
         }
 
     }
