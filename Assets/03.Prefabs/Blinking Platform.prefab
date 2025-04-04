@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4970841178314134447}
   - component: {fileID: 5465613984579404267}
   - component: {fileID: 6004551594457443161}
+  - component: {fileID: -5949879018890096297}
   m_Layer: 3
   m_Name: Blinking Platform
   m_TagString: Platform
@@ -143,7 +144,7 @@ PlatformEffector2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5665677214431709852}
-  m_Enabled: 0
+  m_Enabled: 1
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
@@ -169,3 +170,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visibleTime: 2
   invisibleTime: 1
+--- !u!114 &-5949879018890096297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5665677214431709852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5882637aed909fe4ab73991d9f676f5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

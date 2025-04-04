@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2991003180256848174}
   - component: {fileID: 1388795602869122123}
   - component: {fileID: -1237358425708896522}
+  - component: {fileID: -2189778806307976312}
   m_Layer: 3
   m_Name: Basic Platform
   m_TagString: Platform
@@ -142,7 +143,7 @@ PlatformEffector2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5148810537290651163}
-  m_Enabled: 0
+  m_Enabled: 1
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
@@ -154,3 +155,15 @@ PlatformEffector2D:
   m_UseSideFriction: 0
   m_UseSideBounce: 0
   m_SideArc: 1
+--- !u!114 &-2189778806307976312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5148810537290651163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5882637aed909fe4ab73991d9f676f5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
