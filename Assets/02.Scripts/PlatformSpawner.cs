@@ -67,9 +67,11 @@ public class PlatformSpawner : MonoBehaviour
         {
             totalXChance += pos.chance;
         }
+
         float randomXValue = Random.value * totalXChance;
         float selectedX = 0f;
         float cumulativeXChance = 0f;
+
         foreach (var pos in xPositions)
         {
             cumulativeXChance += pos.chance;
