@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 189864070449937392}
   - component: {fileID: 20013016351833595}
   - component: {fileID: 655267426648705850}
+  - component: {fileID: 9019596440461869299}
   m_Layer: 0
   m_Name: Slime1_Character
   m_TagString: Player
@@ -33,8 +34,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 3.3, y: 3.3, z: 3.3}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -335,3 +336,15 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!210 &9019596440461869299
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5475426253464106599}
+  m_Enabled: 1
+  m_SortingLayerID: 850779211
+  m_SortingLayer: 3
+  m_SortingOrder: 1
+  m_SortAtRoot: 0

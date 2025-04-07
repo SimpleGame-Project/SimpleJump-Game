@@ -9,8 +9,9 @@ namespace Jang
         private Animator _anim;
         public bool _isLand;
         public int _hp;
-        public float _jumpForce;        
+        public float _jumpForce;
         public Vector2 _jumpDirection;
+        public VScrollBackground vscroll;
 
         void Awake()
         {
@@ -38,7 +39,7 @@ namespace Jang
             else
                 _anim.SetFloat("Velocity", -1f);
 
-            if(!_isLand)
+            if (!_isLand)
                 RotatePlayer();
         }
 
@@ -54,17 +55,21 @@ namespace Jang
 
         protected void JumpLand()
         {
-            transform.rotation = Quaternion.identity;
-            _isLand = true;
-            _rb.linearVelocity = Vector2.zero;
+            if (!_isLand)
+            {
+                transform.rotation = Quaternion.identity;
+                _isLand = true;
+                _rb.linearVelocity = Vector2.zero;
+                vscroll.MoveToY(transform.position.y);
 
-            _anim.SetBool("IsLand", _isLand);
-            _anim.SetFloat("Velocity", 0f);
+                _anim.SetBool("IsLand", _isLand);
+                _anim.SetFloat("Velocity", 0f);
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D col)
         {
-            if(col.gameObject.CompareTag("Ground"))
+            if (col.gameObject.CompareTag("Ground"))
             {
                 JumpLand();
             }
@@ -73,7 +78,7 @@ namespace Jang
         private void RotatePlayer()
         {
             float angle = Mathf.Atan2(_rb.linearVelocityY, _rb.linearVelocityX) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0,0, angle - 90);
+            transform.rotation = Quaternion.Euler(0, 0, angle - 90);
         }
     }
 }
