@@ -31,18 +31,6 @@ namespace Jang
             }
         }
 
-        void FixedUpdate()
-        {
-            if (_rb.linearVelocityY > 0f)
-                _anim.SetFloat("Velocity", 1f);
-
-            else
-                _anim.SetFloat("Velocity", -1f);
-
-            if (!_isLand)
-                RotatePlayer();
-        }
-
         public void JumpUp(Vector2 direction, float dragPower)
         {
             if (_isLand)
@@ -57,13 +45,11 @@ namespace Jang
         {
             if (!_isLand)
             {
-                transform.rotation = Quaternion.identity;
                 _isLand = true;
-                _rb.linearVelocity = Vector2.zero;
+                //_rb.linearVelocity = Vector2.zero;
                 vscroll.MoveToY(transform.position.y);
 
                 _anim.SetBool("IsLand", _isLand);
-                _anim.SetFloat("Velocity", 0f);
             }
         }
 
@@ -73,12 +59,6 @@ namespace Jang
             {
                 JumpLand();
             }
-        }
-
-        private void RotatePlayer()
-        {
-            float angle = Mathf.Atan2(_rb.linearVelocityY, _rb.linearVelocityX) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle - 90);
         }
     }
 }

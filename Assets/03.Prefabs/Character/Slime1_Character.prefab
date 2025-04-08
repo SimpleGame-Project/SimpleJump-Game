@@ -177,7 +177,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 1.2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -205,6 +205,7 @@ MonoBehaviour:
   _hp: 0
   _jumpForce: 0
   _jumpDirection: {x: 0, y: 0.5}
+  vscroll: {fileID: 0}
 --- !u!114 &20013016351833595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,7 +222,7 @@ MonoBehaviour:
   _player: {fileID: 0}
   _resolution: 7
   _timeStep: 0.1
-  _gravity: -9.8
+  _gravity: -11.76
 --- !u!120 &655267426648705850
 LineRenderer:
   serializedVersion: 2
