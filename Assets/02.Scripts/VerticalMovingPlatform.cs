@@ -17,27 +17,15 @@ public class VerticalMovingPlatform : MonoBehaviour
         minY = startY - (moveRange / 2f);
         maxY = startY + (moveRange / 2f);
 
-        // 랜덤으로 위로 또는 아래로 시작 결정 (50% 확률)
         moveUpFirst = Random.value > 0.5f;
-
-        // 초기 위치를 시작 방향에 맞춰 설정
         float initialY = moveUpFirst ? minY : maxY;
         transform.position = new Vector3(startX, initialY, transform.position.z);
     }
 
     void Update()
     {
-        // 이동 방향에 따라 계산
-        float t = Mathf.PingPong(Time.time * moveSpeed, 1f); // 0 ~ 1 사이 왕복
-        float newY;
-        if (moveUpFirst)
-        {
-            newY = Mathf.Lerp(minY, maxY, t); // minY에서 maxY로 (위로 시작)
-        }
-        else
-        {
-            newY = Mathf.Lerp(maxY, minY, t); // maxY에서 minY로 (아래로 시작)
-        }
+        float t = Mathf.PingPong(Time.time * moveSpeed, 1f);
+        float newY = moveUpFirst ? Mathf.Lerp(minY, maxY, t) : Mathf.Lerp(maxY, minY, t);
         transform.position = new Vector3(startX, newY, transform.position.z);
     }
 
@@ -53,7 +41,7 @@ public class VerticalMovingPlatform : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // 플랫폼이 활성화 상태인지 확인 후 부모 해제
+            // 플랫폼이 활성화 상태일 때만 부모 해제
             if (gameObject.activeInHierarchy)
             {
                 StartCoroutine(SetParentNextFrame(collision.transform));
@@ -63,22 +51,24 @@ public class VerticalMovingPlatform : MonoBehaviour
 
     private IEnumerator SetParentNextFrame(Transform playerTransform)
     {
-        yield return null; // 다음 프레임까지 대기
+        yield return null; // 다음 프레임 대기
         if (playerTransform != null && gameObject.activeInHierarchy)
         {
             playerTransform.SetParent(null);
         }
     }
 
-    // 플랫폼이 비활성화되거나 파괴될 때 호출
+    // 플랫폼이 비활성화될 때 호출 (안전하게 처리)
     void OnDisable()
     {
-        // 모든 자식(플레이어 포함)을 부모에서 해제
-        foreach (Transform child in transform)
+        // 플랫폼이 비활성화되기 전에 자식 확인
+        for (int i = transform.childCount - 1; i >= 0; i--)
         {
-            if (child.CompareTag("Player"))
+            Transform child = transform.GetChild(i);
+            if (child.CompareTag("Player") && child != null)
             {
-                child.SetParent(null);
+                // 비활성화 중이라 바로 SetParent를 호출하지 않고, 플레이어가 스스로 처리하도록 남겨둠
+                child.SetParent(null); // 안전하게 해제되도록 수정
             }
         }
     }

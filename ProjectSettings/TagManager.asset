@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Platform
+  - Wall
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -41,6 +43,15 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: BackGround
+    uniqueID: 3312646755
+    locked: 0
+  - name: Platform
+    uniqueID: 2970925995
+    locked: 0
+  - name: Character
+    uniqueID: 3286479955
     locked: 0
   m_RenderingLayers:
   - Default
