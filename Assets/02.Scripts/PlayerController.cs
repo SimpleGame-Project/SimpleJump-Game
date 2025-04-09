@@ -1,4 +1,5 @@
-using Unity.VisualScripting;
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Jang
@@ -8,7 +9,37 @@ namespace Jang
         private Rigidbody2D _rb;
         private Animator _anim;
         public bool _isLand;
-        public int _hp;
+        private int _maxHp;
+        private int _hp;
+        public int MaxHp
+        {
+            set
+            {
+                _maxHp = Math.Max(0, value);
+
+                if (GameUIManager.Instance != null)
+                {
+                    GameUIManager.Instance.UpdateHpUI(_maxHp, _hp);
+                }
+            }
+
+            get => _maxHp;
+        }
+        public int Hp
+        {
+            set
+            {
+                _hp = Math.Max(0, value);
+
+                if (GameUIManager.Instance != null)
+                {
+                    GameUIManager.Instance.UpdateHpUI(_maxHp, _hp);
+                }
+            }
+
+            get => _hp;
+        }
+
         public float _jumpForce;
         public Vector2 _jumpDirection;
         public VScrollBackground vscroll;
@@ -19,19 +50,22 @@ namespace Jang
             _rb = GetComponent<Rigidbody2D>();
             _anim = GetComponent<Animator>();
 
-            InitCharacter();
-
             pre_Y = transform.position.y;
+        }
+
+        void Start()
+        {
+            InitCharacter();
         }
 
         protected abstract void InitCharacter();
 
         void FixedUpdate()
         {
-            if(_rb.linearVelocityX < 0)
+            if (_rb.linearVelocityX < 0)
                 _anim.transform.localScale = new Vector3(3f, _anim.transform.localScale.y);
 
-            else if(_rb.linearVelocityX > 0)
+            else if (_rb.linearVelocityX > 0)
                 _anim.transform.localScale = new Vector3(-3f, _anim.transform.localScale.y);
         }
         public void JumpUp(Vector2 direction, float dragPower)
@@ -39,9 +73,15 @@ namespace Jang
             if (_isLand)
             {
                 _isLand = false;
-                _rb.linearVelocity = direction * _jumpForce * dragPower;
+                StartCoroutine(JumpUpCoroutine(direction, dragPower));
                 _anim.SetBool("IsLand", _isLand);
             }
+        }
+
+        private IEnumerator JumpUpCoroutine(Vector2 direction, float dragPower)
+        {
+            yield return new WaitForSeconds(0.3f);
+            _rb.linearVelocity = direction * _jumpForce * dragPower;
         }
 
         protected void JumpLand()
@@ -50,11 +90,14 @@ namespace Jang
             {
                 _isLand = true;
                 _rb.linearVelocity = Vector2.zero;
-                
+
                 _anim.SetBool("IsLand", _isLand);
 
-                if(pre_Y < transform.position.y)
+                if (pre_Y < transform.position.y)
+                {
+                    GameManager.Instance.GameScore++;
                     vscroll.MoveToY(transform.position.y);
+                }
             }
         }
 
@@ -62,7 +105,9 @@ namespace Jang
         {
             if (col.gameObject.CompareTag("Ground"))
             {
-                JumpLand();
+                // 위에서 충돌할 때만 착지 실행
+                if (col.contacts[0].normal.y > 0.5f)
+                    JumpLand();
             }
         }
     }
