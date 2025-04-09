@@ -13,24 +13,27 @@ namespace Jang
         public Vector2 _jumpDirection;
         public VScrollBackground vscroll;
 
+        private float pre_Y;
         void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
             _anim = GetComponent<Animator>();
 
             InitCharacter();
+
+            pre_Y = transform.position.y;
         }
 
         protected abstract void InitCharacter();
 
-        void Update()
+        void FixedUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                JumpUp(_jumpDirection, 0.6f);
-            }
-        }
+            if(_rb.linearVelocityX < 0)
+                _anim.transform.localScale = new Vector3(3f, _anim.transform.localScale.y);
 
+            else if(_rb.linearVelocityX > 0)
+                _anim.transform.localScale = new Vector3(-3f, _anim.transform.localScale.y);
+        }
         public void JumpUp(Vector2 direction, float dragPower)
         {
             if (_isLand)
@@ -46,10 +49,12 @@ namespace Jang
             if (!_isLand)
             {
                 _isLand = true;
-                //_rb.linearVelocity = Vector2.zero;
-                vscroll.MoveToY(transform.position.y);
-
+                _rb.linearVelocity = Vector2.zero;
+                
                 _anim.SetBool("IsLand", _isLand);
+
+                if(pre_Y < transform.position.y)
+                    vscroll.MoveToY(transform.position.y);
             }
         }
 
