@@ -2,17 +2,17 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameUIManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
-    private static GameUIManager _instance;
-    public static GameUIManager Instance
+    private static UIManager _instance;
+    public static UIManager Instance
     {
         get
         {
             // 싱글톤 구현
             if (!_instance)
             {
-                _instance = FindObjectOfType(typeof(GameUIManager)) as GameUIManager;
+                _instance = FindObjectOfType(typeof(UIManager)) as UIManager;
 
                 if (_instance == null)
                     Debug.Log("인스턴스를 생성합니다");
@@ -49,11 +49,6 @@ public class GameUIManager : MonoBehaviour
     {
         endButton.onClick.AddListener(EndGame);
     }
-
-    private void EndGame()
-    {
-        SceneLoadManager.Instance.LoadSceneAync("MainScene");
-    }
     // 점수 텍스트 업데이트
     public void UpdateScoreUI(int score)
     {
@@ -70,10 +65,18 @@ public class GameUIManager : MonoBehaviour
     // 게임 종료 시 결과창 활성화
     public void ActiveEndPanel()
     {
+        // 최고 기록 갱신
+        if (GameManager.Instance.GameScore > PlayerPrefs.GetInt("BestScore", 0)) PlayerPrefs.SetInt("BestScore", GameManager.Instance.GameScore);
+
         endPanel.SetActive(true);
 
         bestScore.text = PlayerPrefs.GetInt("BestScore", 0).ToString();
         currScore.text = GameManager.Instance.GameScore.ToString();
-        goldText.text = (PlayerPrefs.GetInt("BestScore", 0) * 100).ToString();
+        goldText.text = $"{GameManager.Instance.GameScore * 100}";
+    }
+
+    private void EndGame()
+    {
+        SceneLoadManager.Instance.LoadSceneAync("MainScene", () => GameManager.Instance.RewardGold(GameManager.Instance.GameScore * 100));
     }
 }

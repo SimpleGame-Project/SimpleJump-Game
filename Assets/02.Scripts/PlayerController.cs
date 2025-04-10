@@ -11,6 +11,7 @@ namespace Jang
         public bool _isLand;
         private int _maxHp;
         private int _hp;
+        private int _shield;
         private int _attack;
         public int MaxHp
         {
@@ -18,9 +19,9 @@ namespace Jang
             {
                 _maxHp = Math.Max(0, value);
 
-                if (GameUIManager.Instance != null)
+                if (UIManager.Instance != null)
                 {
-                    GameUIManager.Instance.UpdateHpUI(_maxHp, _hp);
+                    UIManager.Instance.UpdateHpUI(_maxHp, _hp);
                 }
             }
 
@@ -32,14 +33,15 @@ namespace Jang
             {
                 _hp = Math.Max(0, value);
 
-                if (GameUIManager.Instance != null)
+                if (UIManager.Instance != null)
                 {
-                    GameUIManager.Instance.UpdateHpUI(_maxHp, _hp);
+                    UIManager.Instance.UpdateHpUI(_maxHp, _hp);
                 }
             }
 
             get => _hp;
         }
+        public int Shield{set => _shield = Math.Max(0, value); get => _shield;}
         public int Attack{set => _attack = Math.Max(0, value); get => _attack;}
 
         public float _jumpForce;
