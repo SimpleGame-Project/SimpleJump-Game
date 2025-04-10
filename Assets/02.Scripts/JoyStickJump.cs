@@ -39,12 +39,17 @@ namespace Jang
                 // 조이스틱을 드래그 중일 때 안내선 표시 
                 Vector2 value = eventData.position - (Vector2)_joyStick.position;
 
+                if(value.y > 0)
+                    value.y = 0;
+                    
                 value = Vector2.ClampMagnitude(value, _radius);
 
+                // 가운데 위치와 핸들 간의 거리로 파워 조정 0 ~ 1
                 _dragPower = Vector2.Distance(_joyStick.position, _handle.position) / _radius;
 
                 _handle.localPosition = value;
 
+                // 아래로 땡기면 위로 튀어 올라가야하므로 점프는 반대 방향
                 _jumpDirection = -value.normalized;
 
                 if (_jumpDirection.x < 0)
@@ -52,6 +57,7 @@ namespace Jang
                 else
                     _player.transform.localScale = new Vector3(-3f, _player.transform.localScale.y);
 
+                // 안내선 활성화
                 _jumpGuide.ShowJumpGuide(_jumpDirection, _dragPower * _player._jumpForce);
             }
         }

@@ -11,6 +11,7 @@ namespace Jang
         public bool _isLand;
         private int _maxHp;
         private int _hp;
+        private int _attack;
         public int MaxHp
         {
             set
@@ -39,6 +40,7 @@ namespace Jang
 
             get => _hp;
         }
+        public int Attack{set => _attack = Math.Max(0, value); get => _attack;}
 
         public float _jumpForce;
         public Vector2 _jumpDirection;
