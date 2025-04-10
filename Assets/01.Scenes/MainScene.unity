@@ -7632,6 +7632,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeType: 1
   cost: 2000
+  isBought: {fileID: 1337666679}
   popUp: {fileID: 1636828825}
   okBtn: {fileID: 1801477305}
 --- !u!1 &924253829
@@ -7773,6 +7774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeType: 0
   cost: 2000
+  isBought: {fileID: 500753788}
   popUp: {fileID: 1636828825}
   okBtn: {fileID: 1801477305}
 --- !u!1 &937903678
@@ -8296,6 +8298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeType: 2
   cost: 4000
+  isBought: {fileID: 1541654600}
   popUp: {fileID: 1636828825}
   okBtn: {fileID: 1801477305}
 --- !u!1 &1156751379
@@ -8816,7 +8819,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAttackUpgrade: 0
   isShieldUpgrade: 0
-  isJumpUpgrade: 0
+  isJumpUpgrade: 1
 --- !u!4 &1401105649
 Transform:
   m_ObjectHideFlags: 0

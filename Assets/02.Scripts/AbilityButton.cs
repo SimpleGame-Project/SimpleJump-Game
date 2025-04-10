@@ -7,6 +7,7 @@ public class AbilityButton : MonoBehaviour
     public enum UpgradeType { Attack, Shield, Jump }
     public UpgradeType upgradeType;
     public int cost;
+    public GameObject isBought;
     private Button myBtn;
 
     [Header("PopUp UI")]
@@ -17,6 +18,33 @@ public class AbilityButton : MonoBehaviour
     {
         myBtn = GetComponent<Button>();
         myBtn.onClick.AddListener(OpenPopUp);
+    }
+
+    void Update()
+    {
+        if (GameManager.Instance != null) SetIsBought(upgradeType);
+    }
+
+    private void SetIsBought(UpgradeType type)
+    {
+        switch (type)
+        {
+            case UpgradeType.Attack:
+                if (GameManager.Instance.isAttackUpgrade) { isBought.SetActive(true); myBtn.interactable = false; }
+                else { isBought.SetActive(false); myBtn.interactable = true; }
+                break;
+
+            case UpgradeType.Shield:
+                if (GameManager.Instance.isShieldUpgrade) { isBought.SetActive(true); myBtn.interactable = false; }
+                else { isBought.SetActive(false); myBtn.interactable = true; }
+                break;
+
+            case UpgradeType.Jump:
+                if (GameManager.Instance.isJumpUpgrade) { isBought.SetActive(true); myBtn.interactable = false; }
+                else { isBought.SetActive(false); myBtn.interactable = true; }
+                break;
+        }
+
     }
 
     private void OpenPopUp()
@@ -47,6 +75,7 @@ public class AbilityButton : MonoBehaviour
                     break;
             }
 
+            isBought.SetActive(true);
             popUp.SetActive(false);
         }
     }

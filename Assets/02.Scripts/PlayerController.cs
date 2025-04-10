@@ -8,6 +8,7 @@ namespace Jang
     {
         private Rigidbody2D _rb;
         private Animator _anim;
+        #region 플레이어 스탯
         public bool _isLand;
         private int _maxHp;
         private int _hp;
@@ -47,7 +48,7 @@ namespace Jang
         public float _jumpForce;
         public Vector2 _jumpDirection;
         public VScrollBackground vscroll;
-
+#endregion
         private float pre_Y;
         void Awake()
         {
@@ -99,8 +100,7 @@ namespace Jang
 
                 if (pre_Y < transform.position.y)
                 {
-                    GameManager.Instance.GameScore++;
-                    vscroll.MoveToY(transform.position.y);
+                    vscroll.MoveToY(transform.position.y - pre_Y);
                 }
             }
         }
