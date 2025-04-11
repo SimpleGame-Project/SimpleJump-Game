@@ -39,6 +39,8 @@ public class GameManager : Singleton<GameManager>
 
     public void StartGame()
     {
+        SFXManager.Instance.PlayClickSound();
+        
         SceneLoadManager.Instance.LoadSceneAync("StoryMode", () =>
         {
             GameScore = 0;

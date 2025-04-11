@@ -35,6 +35,8 @@ public class AbilityButton : MonoBehaviour
 
     private void OpenPopUp()
     {
+        SFXManager.Instance.PlayClickSound();
+
         okBtn.onClick.RemoveAllListeners();
         okBtn.onClick.AddListener(UpgradeAbility);
         popUp.SetActive(true);
@@ -63,6 +65,10 @@ public class AbilityButton : MonoBehaviour
 
             isBought.SetActive(true);
             popUp.SetActive(false);
+
+            SFXManager.Instance.PlayBuySound();
         }
+        else
+            SFXManager.Instance.PlayDenySound();
     }
 }
