@@ -1,25 +1,9 @@
 using System;
 using Jang;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    private static GameManager _instance;
-    public static GameManager Instance
-    {
-        get
-        {
-            if (!_instance)
-            {
-                _instance = FindObjectOfType(typeof(GameManager)) as GameManager;
-
-                if (_instance == null)
-                    Debug.Log("인스턴스를 생성합니다");
-            }
-            return _instance;
-        }
-    }
     private int _gameScore;
     private int _gold;
     public int Gold
@@ -46,22 +30,10 @@ public class GameManager : MonoBehaviour
 
         get => _gameScore;
     }
-    public bool isAttackUpgrade = false;
-    public bool isShieldUpgrade = false;
-    public bool isJumpUpgrade = false;
-    private void Awake()
+    public bool[] isUpgrade = {false, false, false};
+
+    void Start()
     {
-        // 인스턴스가 존재하는데 이 오브젝트가 아니라면 파괴
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _instance = this;
-        // 씬 로드시에도 파괴되지않음 
-        DontDestroyOnLoad(gameObject);
-
         Gold = PlayerPrefs.GetInt("Gold", 0);
     }
 
@@ -74,14 +46,15 @@ public class GameManager : MonoBehaviour
             PlayerController player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 
             // 구입한 업그레이드 적용
-            if (isAttackUpgrade) { player.Attack += 50; isAttackUpgrade = false; }
-            if (isShieldUpgrade) { player.Shield += 3; isShieldUpgrade = false; }
-            if (isJumpUpgrade) { player._jumpForce += 5f; isJumpUpgrade = false; }
+            if (isUpgrade[0]) { player.Attack += 50; isUpgrade[0] = false; }
+            if (isUpgrade[1]) { player.Shield += 3; isUpgrade[1] = false; }
+            if (isUpgrade[2]) { player._jumpForce += 5f; isUpgrade[2] = false; }
         });
     }
 
     public void RewardGold(int rewardGold)
     {
         Gold += rewardGold;
+        PlayerPrefs.SetInt("Gold", Gold);
     }
 }

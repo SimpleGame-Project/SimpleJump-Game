@@ -77,6 +77,8 @@ public class UIManager : MonoBehaviour
 
     private void EndGame()
     {
-        SceneLoadManager.Instance.LoadSceneAync("MainScene", () => GameManager.Instance.RewardGold(GameManager.Instance.GameScore * 100));
+        // MainScene 로딩이 완료되면 보상Gold 지급
+        SceneLoadManager.Instance.LoadSceneAync("MainScene", () =>
+        GameManager.Instance.RewardGold(GameManager.Instance.GameScore * 100));
     }
 }

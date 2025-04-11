@@ -6,14 +6,14 @@ public class AbilityButton : MonoBehaviour
 {
     public enum UpgradeType { Attack, Shield, Jump }
     public UpgradeType upgradeType;
-    public int cost;
-    public GameObject isBought;
+    [SerializeField] int cost;
+    [SerializeField] GameObject isBought;
     private Button myBtn;
 
     [Header("PopUp UI")]
-    public GameObject popUp;
-    public Button okBtn;
-
+    [SerializeField] GameObject popUp;
+    [SerializeField] Button okBtn;
+    private int upgradeIdx => (int)upgradeType;
     void Awake()
     {
         myBtn = GetComponent<Button>();
@@ -22,29 +22,15 @@ public class AbilityButton : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance != null) SetIsBought(upgradeType);
+        if (GameManager.Instance != null) UpdateBuyUI();
     }
 
-    private void SetIsBought(UpgradeType type)
+    private void UpdateBuyUI()
     {
-        switch (type)
-        {
-            case UpgradeType.Attack:
-                if (GameManager.Instance.isAttackUpgrade) { isBought.SetActive(true); myBtn.interactable = false; }
-                else { isBought.SetActive(false); myBtn.interactable = true; }
-                break;
+        bool isUpgrade = GameManager.Instance.isUpgrade[upgradeIdx];
 
-            case UpgradeType.Shield:
-                if (GameManager.Instance.isShieldUpgrade) { isBought.SetActive(true); myBtn.interactable = false; }
-                else { isBought.SetActive(false); myBtn.interactable = true; }
-                break;
-
-            case UpgradeType.Jump:
-                if (GameManager.Instance.isJumpUpgrade) { isBought.SetActive(true); myBtn.interactable = false; }
-                else { isBought.SetActive(false); myBtn.interactable = true; }
-                break;
-        }
-
+        isBought.SetActive(isUpgrade);
+        myBtn.interactable = !isUpgrade;
     }
 
     private void OpenPopUp()
@@ -63,15 +49,15 @@ public class AbilityButton : MonoBehaviour
             switch (upgradeType)
             {
                 case UpgradeType.Attack:
-                    GameManager.Instance.isAttackUpgrade = true;
+                    GameManager.Instance.isUpgrade[0] = true;
                     break;
 
                 case UpgradeType.Shield:
-                    GameManager.Instance.isShieldUpgrade = true;
+                    GameManager.Instance.isUpgrade[1] = true;
                     break;
 
                 case UpgradeType.Jump:
-                    GameManager.Instance.isJumpUpgrade = true;
+                    GameManager.Instance.isUpgrade[2] = true;
                     break;
             }
 
