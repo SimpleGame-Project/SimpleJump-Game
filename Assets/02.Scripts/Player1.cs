@@ -5,7 +5,7 @@ public class Player1 : PlayerController
 {
     protected override void InitCharacter()
     {
-        MaxHp = 5;
+        MaxHp = 4;
         Hp = MaxHp;
         
         _jumpForce = 15f;

@@ -8,6 +8,7 @@ namespace Jang
     {
         private Rigidbody2D _rb;
         private Animator _anim;
+
         #region 플레이어 스탯
         public bool _isLand;
         private int _maxHp;
@@ -19,11 +20,6 @@ namespace Jang
             set
             {
                 _maxHp = Math.Max(0, value);
-
-                if (UIManager.Instance != null)
-                {
-                    UIManager.Instance.UpdateHpUI(_maxHp, _hp);
-                }
             }
 
             get => _maxHp;
@@ -32,23 +28,19 @@ namespace Jang
         {
             set
             {
-                _hp = Math.Max(0, value);
-
-                if (UIManager.Instance != null)
-                {
-                    UIManager.Instance.UpdateHpUI(_maxHp, _hp);
-                }
+                _hp = Math.Min(Math.Max(0, value), MaxHp);
             }
 
             get => _hp;
         }
-        public int Shield{set => _shield = Math.Max(0, value); get => _shield;}
-        public int Attack{set => _attack = Math.Max(0, value); get => _attack;}
+        public int Shield { set => _shield = Math.Max(0, value); get => _shield; }
+        public int Attack { set => _attack = Math.Max(0, value); get => _attack; }
 
         public float _jumpForce;
         public Vector2 _jumpDirection;
+        #endregion
+
         public VScrollBackground vscroll;
-#endregion
         private float pre_Y;
         void Awake()
         {
@@ -113,6 +105,32 @@ namespace Jang
                 if (col.contacts[0].normal.y > 0.5f)
                     JumpLand();
             }
+        }
+
+        [ContextMenu("Hit")]
+        public void Hit()
+        {
+            if (Shield > 0)
+                UIManager.Instance.UpdateShieldUI(Shield--);
+            else
+                UIManager.Instance.UpdateHpUI(MaxHp, Hp--);
+
+            if (Hp == 0)
+                UIManager.Instance.ActiveEndPanel();
+        }
+
+        [ContextMenu("Heal")]
+        public void Heal()
+        {
+            if(Hp != MaxHp)
+                UIManager.Instance.UpdateHpUI(MaxHp, ++Hp);
+        }
+
+        [ContextMenu("GetShield")]
+        public void GetShield()
+        {
+            if(Shield != 3)
+            UIManager.Instance.UpdateShieldUI(++Shield);
         }
     }
 }

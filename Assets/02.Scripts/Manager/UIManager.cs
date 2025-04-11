@@ -1,4 +1,5 @@
 using System;
+using Jang;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,16 +23,18 @@ public class UIManager : MonoBehaviour
     }
 
     [Header("Game UI")]
-    public Text scoreText;
-    public Slider hpSlider;
-    public Text hpText;
+    [SerializeField] Text scoreText;
+    [SerializeField] Transform hpContainer;
+    private Transform[] hearts;
+    [SerializeField] GameObject heart_Prefab;
+    [SerializeField] Transform[] shields;
 
     [Header("EndPanel UI")]
-    public GameObject endPanel;
-    public Button endButton;
-    public Text bestScore;
-    public Text currScore;
-    public Text goldText;
+    [SerializeField] GameObject endPanel;
+    [SerializeField] Button endButton;
+    [SerializeField] Text bestScore;
+    [SerializeField] Text currScore;
+    [SerializeField] Text goldText;
 
     private void Awake()
     {
@@ -49,17 +52,39 @@ public class UIManager : MonoBehaviour
     {
         endButton.onClick.AddListener(EndGame);
     }
+
+    public void InitHpShieldUI(int maxHp)
+    {
+        hearts = new Transform[maxHp];
+
+        for (int i = 0; i < maxHp; i++)
+        {
+            hearts[i] = Instantiate(heart_Prefab, hpContainer).transform;
+        }
+
+        for(int i = 0; i < GameManager.Instance.player.Shield; i++)
+        {
+            shields[i].GetChild(0).gameObject.SetActive(true);
+        }
+    }
+
     // 점수 텍스트 업데이트
     public void UpdateScoreUI(int score)
     {
         scoreText.text = $"Floor: {score}";
     }
 
-    // 체력 슬라이더 바 업데이트
+    // 체력 UI 업데이트
     public void UpdateHpUI(int maxHp, int hp)
     {
-        hpSlider.value = hp / maxHp;
-        hpText.text = $"{hp} / {maxHp}";
+        GameObject obj = hearts[Math.Max(0, maxHp - hp)].GetChild(0).gameObject;
+        obj.SetActive(!obj.activeSelf);
+    }
+
+    public void UpdateShieldUI(int shield)
+    {   
+        GameObject obj = shields[Math.Max(0, 3 - shield)].GetChild(0).gameObject;
+        obj.SetActive(!obj.activeSelf);
     }
 
     // 게임 종료 시 결과창 활성화
