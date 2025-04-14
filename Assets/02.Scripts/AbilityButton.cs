@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class AbilityButton : MonoBehaviour
 {
-    public enum UpgradeType { Attack, Shield, Jump }
+    public enum UpgradeType { Attack, Shield, Jump } // 업그레이드 타입
     public UpgradeType upgradeType;
     [SerializeField] int cost;
     [SerializeField] GameObject isBought;
@@ -13,7 +13,7 @@ public class AbilityButton : MonoBehaviour
     [Header("PopUp UI")]
     [SerializeField] GameObject popUp;
     [SerializeField] Button okBtn;
-    private int upgradeIdx => (int)upgradeType;
+    private int upgradeIdx => (int)upgradeType; // Enum 타입 정수로 변환
     void Awake()
     {
         myBtn = GetComponent<Button>();
@@ -27,6 +27,7 @@ public class AbilityButton : MonoBehaviour
 
     private void UpdateBuyUI()
     {
+        // 업그레이드 된 상태와 동기화
         bool isUpgrade = GameManager.Instance.isUpgrade[upgradeIdx];
 
         isBought.SetActive(isUpgrade);
@@ -48,20 +49,7 @@ public class AbilityButton : MonoBehaviour
         {
             GameManager.Instance.Gold -= cost;
 
-            switch (upgradeType)
-            {
-                case UpgradeType.Attack:
-                    GameManager.Instance.isUpgrade[0] = true;
-                    break;
-
-                case UpgradeType.Shield:
-                    GameManager.Instance.isUpgrade[1] = true;
-                    break;
-
-                case UpgradeType.Jump:
-                    GameManager.Instance.isUpgrade[2] = true;
-                    break;
-            }
+            GameManager.Instance.isUpgrade[upgradeIdx] = true;
 
             isBought.SetActive(true);
             popUp.SetActive(false);

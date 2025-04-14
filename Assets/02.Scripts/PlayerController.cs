@@ -8,6 +8,8 @@ namespace Jang
     {
         private Rigidbody2D _rb;
         private Animator _anim;
+        private UIManager uIManager;
+        private PlayerAudioController _audio;
 
         #region 플레이어 스탯
         public bool _isLand;
@@ -46,6 +48,7 @@ namespace Jang
         {
             _rb = GetComponent<Rigidbody2D>();
             _anim = GetComponent<Animator>();
+            _audio = GetComponent<PlayerAudioController>();
 
             pre_Y = transform.position.y;
         }
@@ -53,6 +56,7 @@ namespace Jang
         void Start()
         {
             InitCharacter();
+            uIManager = UIManager.Instance;
         }
 
         protected abstract void InitCharacter();
@@ -78,13 +82,17 @@ namespace Jang
         private IEnumerator JumpUpCoroutine(Vector2 direction, float dragPower)
         {
             yield return new WaitForSeconds(0.3f);
+
             _rb.linearVelocity = direction * _jumpForce * dragPower;
+            _audio.PlayJumpSound();
         }
 
         protected void JumpLand()
         {
             if (!_isLand)
             {
+                _audio.PlayLandSound();
+
                 _isLand = true;
                 _rb.linearVelocity = Vector2.zero;
 
@@ -107,13 +115,27 @@ namespace Jang
             }
         }
 
+        void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.Q))
+                Hit();
+
+            if(Input.GetKeyDown(KeyCode.W))
+                Heal();
+
+            if(Input.GetKeyDown(KeyCode.E))
+                GetShield();
+        }
+
         [ContextMenu("Hit")]
         public void Hit()
         {
+            _audio.PlayHitSound();
+
             if (Shield > 0)
-                UIManager.Instance.UpdateShieldUI(Shield--);
+                uIManager.UpdateShieldUI(Shield--);
             else
-                UIManager.Instance.UpdateHpUI(MaxHp, Hp--);
+                uIManager.UpdateHpUI(MaxHp, Hp--);
 
             if (Hp == 0)
                 UIManager.Instance.ActiveEndPanel();
@@ -123,14 +145,14 @@ namespace Jang
         public void Heal()
         {
             if(Hp != MaxHp)
-                UIManager.Instance.UpdateHpUI(MaxHp, ++Hp);
+                uIManager.UpdateHpUI(MaxHp, ++Hp);
         }
 
         [ContextMenu("GetShield")]
         public void GetShield()
         {
             if(Shield != 3)
-            UIManager.Instance.UpdateShieldUI(++Shield);
+            uIManager.UpdateShieldUI(++Shield);
         }
     }
 }

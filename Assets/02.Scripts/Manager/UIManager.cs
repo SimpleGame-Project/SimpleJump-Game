@@ -81,6 +81,7 @@ public class UIManager : MonoBehaviour
         obj.SetActive(!obj.activeSelf);
     }
 
+    // 쉴드 UI 업데이트
     public void UpdateShieldUI(int shield)
     {   
         GameObject obj = shields[Math.Max(0, 3 - shield)].GetChild(0).gameObject;
@@ -103,7 +104,7 @@ public class UIManager : MonoBehaviour
     private void EndGame()
     {
         SFXManager.Instance.PlayClickSound();
-        
+
         // MainScene 로딩이 완료되면 보상Gold 지급
         SceneLoadManager.Instance.LoadSceneAync("MainScene", () =>
         GameManager.Instance.RewardGold(GameManager.Instance.GameScore * 100));
