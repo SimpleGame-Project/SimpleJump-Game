@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7166724786644724089}
   - component: {fileID: -1301798783158395830}
   - component: {fileID: 1225823866264048776}
+  - component: {fileID: -624329957512829703}
   m_Layer: 3
   m_Name: Vertical Moving Platform
   m_TagString: Platform
@@ -182,3 +183,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5882637aed909fe4ab73991d9f676f5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-624329957512829703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8221764708316429740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a785e1ddc831f14989d2698394263cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  points: 1
