@@ -16,6 +16,7 @@ public class JumpGuide : MonoBehaviour
     }
     public void ShowJumpGuide(Vector2 jumpDirection, float dragPower)
     {
+        // 받아온 방향과 드래그 정도를 파악하여 안내선 계산
         _jumpVelocity = jumpDirection * dragPower;
         _lineRender.positionCount = _resolution;
 

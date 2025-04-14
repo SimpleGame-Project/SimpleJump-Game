@@ -39,8 +39,13 @@ public class VScrollBackground : MonoBehaviour
         }
     }
 
-    public void MoveToY(float y)
+    public void MoveToY(float diffY)
     {
-        targetY -= platformInterval;
+        targetY -= diffY;
+
+        if(diffY > (platformInterval - 1) * 2)
+            GameManager.Instance.GameScore += 2;
+        else
+            GameManager.Instance.GameScore++; 
     }
 }

@@ -76,6 +76,7 @@ public class Playermove : MonoBehaviour
         {
             Collider2D platformCollider = platform.GetComponent<Collider2D>();
             Collider2D playerCollider = GetComponent<Collider2D>();
+            
             if (platformCollider != null && playerCollider != null)
             {
                 Physics2D.IgnoreCollision(playerCollider, platformCollider, ignore);

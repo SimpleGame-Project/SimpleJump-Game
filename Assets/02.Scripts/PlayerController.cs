@@ -1,4 +1,5 @@
-using Unity.VisualScripting;
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Jang
@@ -7,63 +8,100 @@ namespace Jang
     {
         private Rigidbody2D _rb;
         private Animator _anim;
+        private UIManager uIManager;
+        private PlayerAudioController _audio;
+
+        #region 플레이어 스탯
         public bool _isLand;
-        public int _hp;
+        private int _maxHp;
+        private int _hp;
+        private int _shield;
+        private int _attack;
+        public int MaxHp
+        {
+            set
+            {
+                _maxHp = Math.Max(0, value);
+            }
+
+            get => _maxHp;
+        }
+        public int Hp
+        {
+            set
+            {
+                _hp = Math.Min(Math.Max(0, value), MaxHp);
+            }
+
+            get => _hp;
+        }
+        public int Shield { set => _shield = Math.Max(0, value); get => _shield; }
+        public int Attack { set => _attack = Math.Max(0, value); get => _attack; }
+
         public float _jumpForce;
         public Vector2 _jumpDirection;
-        public VScrollBackground vscroll;
+        #endregion
 
+        public VScrollBackground vscroll;
+        private float pre_Y;
         void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
             _anim = GetComponent<Animator>();
+            _audio = GetComponent<PlayerAudioController>();
 
+            pre_Y = transform.position.y;
+        }
+
+        void Start()
+        {
             InitCharacter();
+            uIManager = UIManager.Instance;
         }
 
         protected abstract void InitCharacter();
 
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                JumpUp(_jumpDirection, 0.6f);
-            }
-        }
-
         void FixedUpdate()
         {
-            if (_rb.linearVelocityY > 0f)
-                _anim.SetFloat("Velocity", 1f);
+            if (_rb.linearVelocityX < 0)
+                _anim.transform.localScale = new Vector3(3f, _anim.transform.localScale.y);
 
-            else
-                _anim.SetFloat("Velocity", -1f);
-
-            if (!_isLand)
-                RotatePlayer();
+            else if (_rb.linearVelocityX > 0)
+                _anim.transform.localScale = new Vector3(-3f, _anim.transform.localScale.y);
         }
-
         public void JumpUp(Vector2 direction, float dragPower)
         {
             if (_isLand)
             {
                 _isLand = false;
-                _rb.linearVelocity = direction * _jumpForce * dragPower;
+                StartCoroutine(JumpUpCoroutine(direction, dragPower));
                 _anim.SetBool("IsLand", _isLand);
             }
+        }
+
+        private IEnumerator JumpUpCoroutine(Vector2 direction, float dragPower)
+        {
+            yield return new WaitForSeconds(0.3f);
+
+            _rb.linearVelocity = direction * _jumpForce * dragPower;
+            _audio.PlayJumpSound();
         }
 
         protected void JumpLand()
         {
             if (!_isLand)
             {
-                transform.rotation = Quaternion.identity;
+                _audio.PlayLandSound();
+
                 _isLand = true;
                 _rb.linearVelocity = Vector2.zero;
-                vscroll.MoveToY(transform.position.y);
 
                 _anim.SetBool("IsLand", _isLand);
-                _anim.SetFloat("Velocity", 0f);
+
+                if (pre_Y < transform.position.y)
+                {
+                    vscroll.MoveToY(transform.position.y - pre_Y);
+                }
             }
         }
 
@@ -71,14 +109,50 @@ namespace Jang
         {
             if (col.gameObject.CompareTag("Ground"))
             {
-                JumpLand();
+                // 위에서 충돌할 때만 착지 실행
+                if (col.contacts[0].normal.y > 0.5f)
+                    JumpLand();
             }
         }
 
-        private void RotatePlayer()
+        void Update()
         {
-            float angle = Mathf.Atan2(_rb.linearVelocityY, _rb.linearVelocityX) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+            if(Input.GetKeyDown(KeyCode.Q))
+                Hit();
+
+            if(Input.GetKeyDown(KeyCode.W))
+                Heal();
+
+            if(Input.GetKeyDown(KeyCode.E))
+                GetShield();
+        }
+
+        [ContextMenu("Hit")]
+        public void Hit()
+        {
+            _audio.PlayHitSound();
+
+            if (Shield > 0)
+                uIManager.UpdateShieldUI(Shield--);
+            else
+                uIManager.UpdateHpUI(MaxHp, Hp--);
+
+            if (Hp == 0)
+                UIManager.Instance.ActiveEndPanel();
+        }
+
+        [ContextMenu("Heal")]
+        public void Heal()
+        {
+            if(Hp != MaxHp)
+                uIManager.UpdateHpUI(MaxHp, ++Hp);
+        }
+
+        [ContextMenu("GetShield")]
+        public void GetShield()
+        {
+            if(Shield != 3)
+            uIManager.UpdateShieldUI(++Shield);
         }
     }
 }
