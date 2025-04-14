@@ -37,7 +37,5 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         // 인스턴스가 존재한다면 현재 오브젝트 파괴
         else if (instance != null)
             Destroy(gameObject);
-
-        
     }
 }
