@@ -6939,9 +6939,9 @@ GameObject:
   - component: {fileID: 621520822}
   - component: {fileID: 621520826}
   - component: {fileID: 621520825}
-  - component: {fileID: 621520824}
   - component: {fileID: 621520823}
   - component: {fileID: 621520827}
+  - component: {fileID: 621520828}
   m_Layer: 0
   m_Name: PlatformSpawner
   m_TagString: Untagged
@@ -6982,24 +6982,6 @@ MonoBehaviour:
   xPositions:
   - xPosition: 0
     chance: 1
---- !u!114 &621520824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 621520818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 766bc1d429b735f4d9124f7ef08e32c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  platforms: []
-  xPositions: []
-  spawnRate: 2
-  fixedYSpacing: 4
-  nextSpawnTime: 0
-  lastYPosition: 0
 --- !u!114 &621520825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7015,6 +6997,8 @@ MonoBehaviour:
   minYSpacing: 4
   maxYSpacing: 4
   initialYSpacing: 4
+  playerTransform: {fileID: 0}
+  mainCamera: {fileID: 0}
 --- !u!114 &621520826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7044,7 +7028,22 @@ MonoBehaviour:
   platformPositioner: {fileID: 621520825}
   objectPooler: {fileID: 621520826}
   platformsParent: {fileID: 537375590}
+  playerTransform: {fileID: 6877146737439035808}
   spawnRate: 2
+--- !u!114 &621520828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621520818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6313df69972f9048a58721ea7f542dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  platformsParent: {fileID: 537375590}
+  mainCamera: {fileID: 33629094}
 --- !u!1 &640728809
 GameObject:
   m_ObjectHideFlags: 0

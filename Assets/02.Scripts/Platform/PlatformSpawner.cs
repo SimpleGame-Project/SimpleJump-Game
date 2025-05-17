@@ -2,18 +2,19 @@ using UnityEngine;
 
 public class PlatformSpawner : MonoBehaviour
 {
-    public PlatformSelector platformSelector; // 발판과 X 위치 선택
-    public PlatformPositioner platformPositioner; // Y 위치 계산
-    public ObjectPooler objectPooler; // 오브젝트 풀링 관리
-    public Transform platformsParent; // 발판의 부모 오브젝트 (Platforms)
+    public PlatformSelector platformSelector;
+    public PlatformPositioner platformPositioner;
+    public ObjectPooler objectPooler;
+    public Transform platformsParent;
+    public Transform playerTransform;
+    private Camera mainCamera; // 메인 카메라 참조 추가
 
-    public float spawnRate = 2f; // 발판 생성 주기
+    public float spawnRate = 2f;
     private float nextSpawnTime;
-    private int initialPlatformCount = 5; // 초반 생성 발판 수
+    private int initialPlatformCount = 5;
 
     void Start()
     {
-        // Platforms 오브젝트 찾기
         if (platformsParent == null)
         {
             GameObject platformsObj = GameObject.Find("Platforms");
@@ -28,22 +29,38 @@ public class PlatformSpawner : MonoBehaviour
             }
         }
 
-        // 초기 Y 위치 설정
-        platformPositioner.Initialize(transform.position.y);
+        if (playerTransform == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                playerTransform = playerObj.transform;
+            }
+            else
+            {
+                Debug.LogWarning("플레이어 오브젝트를 찾을 수 없습니다. 'Player' 태그를 확인하세요.");
+            }
+        }
 
-        // 오브젝트 풀 초기화
+        // 메인 카메라 초기화
+        mainCamera = Camera.main;
+
+        platformPositioner.Initialize(transform.position.y, mainCamera); // 카메라 전달
+        platformPositioner.playerTransform = playerTransform;
         objectPooler.Initialize(platformSelector, platformsParent);
-
-        // 초반 5개 발판 생성
         SpawnInitialPlatforms();
-
-        // 랜덤 생성을 위한 시간 설정
         nextSpawnTime = Time.time + spawnRate;
+
+        PlatformCameraCuller culler = gameObject.GetComponent<PlatformCameraCuller>();
+        if (culler == null)
+        {
+            culler = gameObject.AddComponent<PlatformCameraCuller>();
+        }
+        culler.platformsParent = platformsParent;
     }
 
     void Update()
     {
-        // 초반 5개 발판 생성 후, 랜덤 생성 시작
         if (Time.time >= nextSpawnTime)
         {
             SpawnRandomPlatform();
@@ -55,33 +72,26 @@ public class PlatformSpawner : MonoBehaviour
     {
         for (int i = 0; i < initialPlatformCount; i++)
         {
-            SpawnPlatform(true); // 초반 발판 생성
+            SpawnPlatform(true);
         }
     }
 
     void SpawnRandomPlatform()
     {
-        SpawnPlatform(false); // 랜덤 발판 생성
+        SpawnPlatform(false);
     }
 
     void SpawnPlatform(bool isInitial)
     {
-        // 발판 선택
         GameObject selectedPlatform = platformSelector.SelectRandomPlatform();
-
-        // X 위치 선택
         float selectedX = platformSelector.SelectRandomXPosition();
-
-        // Y 위치 계산
         float newY = platformPositioner.CalculateNextYPosition(isInitial);
-
-        // 발판 생성 (오브젝트 풀에서 가져오기)
         Vector3 spawnPosition = new Vector3(selectedX, newY, 0);
         GameObject platform = objectPooler.GetPooledPlatform(selectedPlatform);
         if (platform != null)
         {
             platform.transform.position = spawnPosition;
-            platform.transform.SetParent(platformsParent); // Platforms를 부모로 설정
+            platform.transform.SetParent(platformsParent);
             platform.SetActive(true);
         }
         else
