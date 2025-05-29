@@ -25,7 +25,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         // 인스턴스가 없을 때 해당 오브젝트로 설정
         if (instance == null)

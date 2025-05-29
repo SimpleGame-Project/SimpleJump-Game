@@ -14,6 +14,7 @@ public class AbilityButton : MonoBehaviour
     [SerializeField] GameObject popUp;
     [SerializeField] Button okBtn;
     private int upgradeIdx => (int)upgradeType; // Enum 타입 정수로 변환
+    
     void Awake()
     {
         myBtn = GetComponent<Button>();
